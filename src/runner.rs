@@ -6,7 +6,11 @@ pub struct Runner {
 }
 
 impl Runner {
-    pub fn run(cmd: String) -> Result<(), CommonError> {
+    pub fn run(cmd: &str) -> Result<(), CommonError> {
+        if cmd.trim().len() == 0 {
+            return Ok(());
+        }
+
         let args = cmd
             .split(" ")
             .map(|s| String::from(s))

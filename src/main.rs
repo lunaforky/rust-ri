@@ -12,22 +12,17 @@ mod utils;
 fn run() -> Result<(), CommonError> {
     let opt = opt::Opt::from_args();
 
-    let agent = agents::get_current_agent()?;
+    let mut parser = parser::Parser::parser_opt(&opt)?;
 
-    let cmd = parser::Parser::parser_opt(&opt)?.gene_command(agent);
+    let cmd = parser.gene_command()?;
 
-    match cmd {
-        Some(str) => {
-            println!("{}", str);
+    println!("Execute: {}", &cmd);
 
-            if !opt.debug {
-                runner::Runner::run(str)?;
-            }
-
-            Ok(())
-        }
-        None => Ok(()),
+    if !opt.debug {
+        runner::Runner::run(&cmd)?;
     }
+
+    Ok(())
 }
 
 fn main() -> () {

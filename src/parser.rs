@@ -1,5 +1,5 @@
 use crate::{
-    agents::Agent,
+    agents::{self, Agent},
     commands::Command,
     error::CommonError,
     opt::{Opt, SubCommand},
@@ -134,10 +134,13 @@ impl Parser {
 }
 
 impl Parser {
-    pub fn gene_command(&mut self, agent: Agent) -> Option<String> {
+    pub fn gene_command(&mut self) -> Result<String, CommonError> {
+        // don't need get agent or execute command
         if self.command == Command::IgnoredCommand {
-            return None;
+            return Ok("".to_string());
         }
+
+        let agent = agents::get_current_agent()?;
 
         let hash_map = Agent::get_agent_hash_map(agent);
 
@@ -157,16 +160,16 @@ impl Parser {
                     let command = cmd.clone();
                     if command.contains("$0") {
                         match &self.args {
-                            None => Some(command.replace("$0", "").trim().to_string()),
-                            Some(arg) => Some(command.replace("$0", &arg.join(" "))),
+                            None => Ok(command.replace("$0", "").trim().to_string()),
+                            Some(arg) => Ok(command.replace("$0", &arg.join(" "))),
                         }
                     } else {
-                        Some(command)
+                        Ok(command)
                     }
                 }
-                None => None,
+                None => Ok("".to_string()),
             },
-            None => None,
+            None => Ok("".to_string()),
         }
     }
 }

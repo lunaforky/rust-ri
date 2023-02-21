@@ -1,7 +1,7 @@
 use structopt::StructOpt;
 
 #[derive(Debug, StructOpt)]
-#[structopt(name = "Ri", about = "A rust version ni.")]
+#[structopt(name = "Ri", about = "A rust version ni.", rename_all = "kebab-case")]
 pub struct Opt {
     #[structopt(subcommand)]
     pub cmd: Option<SubCommand>,
