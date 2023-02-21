@@ -82,3 +82,10 @@ pub fn ask_confirm_question(question_content: &str) -> Result<bool, CommonError>
         None => Ok(false),
     }
 }
+
+/// judge content is a git clone url or not.
+///
+/// such as `git@xxx/xxx/xxx.git` or `http(s)://xxx/xxx/xxx.git`
+pub fn is_a_git_clone_url(ctx: &str) -> bool {
+    ctx.ends_with(".git") && (ctx.starts_with("http") || ctx.starts_with("git@"))
+}

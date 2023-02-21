@@ -13,4 +13,5 @@ pub enum Command {
     Execute,
     UpgradeInteractive,
     IgnoredCommand,
+    GitClone,
 }

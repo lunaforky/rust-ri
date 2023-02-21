@@ -29,6 +29,9 @@ pub enum SubCommand {
     /// Run script
     R { run_name: Option<String> },
 
+    /// Git clone
+    Cl { src: Option<String> },
+
     #[structopt(external_subcommand)]
     Other(Vec<String>),
 }

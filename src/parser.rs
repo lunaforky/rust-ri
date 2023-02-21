@@ -3,8 +3,9 @@ use crate::{
     commands::Command,
     error::CommonError,
     opt::{Opt, SubCommand},
-    utils::{self, exclude},
+    utils::{self, exclude, is_a_git_clone_url},
 };
+use clipboard::{ClipboardContext, ClipboardProvider};
 
 #[derive(Debug)]
 pub struct Parser {
@@ -114,6 +115,25 @@ impl Parser {
                         args: Some(vec![name.to_string()]),
                     }),
                 },
+                SubCommand::Cl { src } => match src {
+                    Some(src) => Ok(Parser {
+                        command: Command::GitClone,
+                        args: Some(vec![src.to_string()]),
+                    }),
+                    None => {
+                        // TODO: catch error
+                        let mut ctx: ClipboardContext = ClipboardProvider::new().unwrap();
+                        let content = ctx.get_contents().unwrap();
+                        let mut args = vec![];
+                        if is_a_git_clone_url(&content) {
+                            args.push(content);
+                        }
+                        Ok(Parser {
+                            command: Command::GitClone,
+                            args: Some(args),
+                        })
+                    }
+                },
                 SubCommand::Other(v) => Ok(Parser::parser_other_args(v.clone())),
             },
         }
@@ -138,6 +158,17 @@ impl Parser {
         // don't need get agent or execute command
         if self.command == Command::IgnoredCommand {
             return Ok("".to_string());
+        }
+
+        if self.command == Command::GitClone {
+            let src = self.args.as_ref().unwrap();
+            if src.len() == 0 {
+                return Err(CommonError::NotFound(
+                    ("repository url not found").to_string(),
+                ));
+            }
+            let src = &src[0];
+            return Ok(format!("git clone {}", src));
         }
 
         let agent = agents::get_current_agent()?;
