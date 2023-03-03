@@ -53,6 +53,8 @@ rni r dev
 # bun run dev
 ```
 
+Specially, you can use `rni rd` to run scripts `<agent> run dev`
+
 ```bash
 rni r
 

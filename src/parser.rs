@@ -134,6 +134,10 @@ impl Parser {
                         })
                     }
                 },
+                SubCommand::Rd => Ok(Parser {
+                    command: Command::Run,
+                    args: Some(vec!["dev".to_string()]),
+                }),
                 SubCommand::Other(v) => Ok(Parser::parser_other_args(v.clone())),
             },
         }

@@ -29,6 +29,9 @@ pub enum SubCommand {
     /// Run script
     R { run_name: Option<String> },
 
+    /// Special for `run dev`
+    Rd,
+
     /// Git clone
     Cl { src: Option<String> },
 
