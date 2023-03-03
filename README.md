@@ -88,6 +88,16 @@ rni un webpack
 - use `rni -c` to remove node_modules/**
 - use `rni -c lock` to remove lockfile of current agent, like `yarn.lock` / `pnpm-lock.yaml` / `package-lock.json` / `bun.lockb`
 
+### `rni cl` - clone a repo
+
+> you don't need to paste the url, just press enter
+
+- step 1: copy the repo url
+- step 2: `rni cl`
+
+
+full command: `rni cl <url>`
+
 <br>
 
 ### How?
