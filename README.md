@@ -13,10 +13,10 @@ cargo install <b>rni</b>
 
 <br>
 
-### `rni` - install
+### `ri` - install
 
 ```bash
-rni
+ri
 
 # npm install
 # yarn install
@@ -25,7 +25,7 @@ rni
 ```
 
 ```bash
-rni vite
+ri vite
 
 # npm i vite
 # yarn add vite
@@ -34,7 +34,7 @@ rni vite
 ```
 
 ```bash
-rni -f
+ri -f
 
 # npm ci
 # yarn install --frozen-lockfile
@@ -42,10 +42,10 @@ rni -f
 # bun install --no-save
 ```
 
-### `rni r` - run
+### `ri r` - run
 
 ```bash
-rni r dev
+ri r dev
 
 # npm run dev
 # yarn run dev
@@ -53,10 +53,10 @@ rni r dev
 # bun run dev
 ```
 
-Specially, you can use `rni rd` to run scripts `<agent> run dev`
+Specially, you can use `ri rd` to run scripts `<agent> run dev`
 
 ```bash
-rni r
+ri r
 
 # interactively select the script to run
 # supports https://www.npmjs.com/package/npm-scripts-info convention
@@ -66,16 +66,16 @@ rni r
 
 <p align="left">
   <img
-    src="./graphs/rni r.gif"
-    alt="rni r"
-    title="rni r"
+    src="./graphs/ri_r.gif"
+    alt="ri r"
+    title="ri r"
   />
 </p>
 
-### `rni un` - uninstall
+### `ri un` - uninstall
 
 ```bash
-rni un webpack
+ri un webpack
 
 # npm uninstall webpack
 # yarn remove webpack
@@ -83,20 +83,20 @@ rni un webpack
 # bun remove webpack
 ```
 
-### `rni -c` - clean your workspace
+### `ri -c` - clean your workspace
 
-- use `rni -c` to remove node_modules/**
-- use `rni -c lock` to remove lockfile of current agent, like `yarn.lock` / `pnpm-lock.yaml` / `package-lock.json` / `bun.lockb`
+- use `ri -c` to remove node_modules/**
+- use `ri -c lock` to remove lockfile of current agent, like `yarn.lock` / `pnpm-lock.yaml` / `package-lock.json` / `bun.lockb`
 
-### `rni cl` - clone a repo
+### `ri cl` - clone a repo
 
 > you don't need to paste the url, just press enter
 
 - step 1: copy the repo url
-- step 2: `rni cl`
+- step 2: `ri cl`
 
 
-full command: `rni cl <url>`
+full command: `ri cl <url>`
 
 <br>
 

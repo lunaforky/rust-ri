@@ -1,12 +1,17 @@
 [package]
+authors = ["JiatLn <iamcx33@163.com>"]
 name = "rni"
-version = "0.2.2"
+version = "0.2.3"
 edition = "2021"
 description = "a rust version ni"
 license = "MIT"
 homepage = "https://github.com/JiatLn/ri"
 repository = "https://github.com/JiatLn/ri"
 keywords = ["cli", "ni", "ri"]
+
+[[bin]]
+name = "ri"
+path = "src/main.rs"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
@@ -16,3 +21,4 @@ requestty = { version = "0.5.0", features = ["macros"] }
 serde = { version = "1.0", features = ["derive"] }
 serde_json = "1.0.87"
 clipboard = "0.5.0"
+
