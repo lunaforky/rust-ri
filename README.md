@@ -24,6 +24,14 @@ ri
 # bun install
 ```
 
+<p align="left">
+  <img
+    src="./graphs/ri.gif"
+    alt="ri"
+    title="ri"
+  />
+</p>
+
 ```bash
 ri vite
 
