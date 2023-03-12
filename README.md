@@ -1,4 +1,4 @@
-# rni
+# ri
 A rust version ni.
 
 > [ni](https://github.com/antfu/ni) - 💡 Use the right package manager
@@ -110,7 +110,7 @@ full command: `ri cl <url>`
 
 ### How?
 
-**rni** assumes that you work with lockfiles (and you should)
+**ri** assumes that you work with lockfiles (and you should)
 
 Before it runs, it will detect your `yarn.lock` / `pnpm-lock.yaml` / `package-lock.json` / `bun.lockb` to know current package manager (or `packageManager` field in your packages.json if specified), and runs the [corresponding commands](https://github.com/JiatLn/ri/blob/main/src/agents.rs).
 
