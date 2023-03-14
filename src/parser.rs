@@ -130,73 +130,71 @@ impl Parser {
 }
 
 impl Parser {
-    pub fn gene_command(&mut self) -> Result<String, CommonError> {
-        // don't need get agent or execute command
-        if self.command == Command::IgnoredCommand {
-            return Ok("".to_string());
-        }
-
-        if self.command == Command::GitClone {
-            let src = self.args.as_ref().unwrap();
-            if src.len() == 0 {
-                return Err(CommonError::NotFound(
-                    ("repository url not found").to_string(),
-                ));
-            }
-            let src = &src[0];
-            return Ok(format!("git clone {}", src));
-        }
-
-        if self.command == Command::RemoveNodeModules {
-            let is_remove = utils::ask_confirm_question("Do you want to remove node_modules?")?;
-
-            if is_remove {
-                utils::remove_dir_all_file_with_path("node_modules")?;
-                println!("node_modules removed success!")
-            }
-            return Ok("".to_string());
-        }
-
-        if self.command == Command::RemoveLockFile {
-            let is_remove = utils::ask_confirm_question("Do you want to remove lockfile?")?;
-
-            if is_remove {
-                utils::remove_lock_files()?;
-                println!("lockfile removed success!")
-            }
-            return Ok("".to_string());
-        }
-
-        let agent = agents::get_current_agent()?;
-
-        let hash_map = Agent::get_agent_hash_map(agent);
-
-        // instand of yarn install xxx => yarn add xxx
-        match &agent {
-            Agent::Yarn | Agent::Pnpm => {
-                if self.command == Command::Install && self.args.is_some() {
-                    self.command = Command::Add
+    pub fn gene_command(&mut self, opt: &Opt) -> Result<String, CommonError> {
+        match self.command {
+            Command::IgnoredCommand => Ok("".to_string()),
+            Command::GitClone => {
+                let src = self.args.as_ref().unwrap();
+                if src.len() == 0 {
+                    return Err(CommonError::NotFound(
+                        ("repository url not found").to_string(),
+                    ));
                 }
+                let src = &src[0];
+                Ok(format!("git clone {}", src))
             }
-            _ => (),
-        }
+            Command::RemoveNodeModules => {
+                let is_remove = utils::ask_confirm_question("Do you want to remove node_modules?")?;
 
-        match hash_map.get(&self.command) {
-            Some(cmd) => match &cmd {
-                Some(cmd) => {
-                    let command = cmd.clone();
-                    if command.contains("$0") {
-                        match &self.args {
-                            None => Ok(command.replace("$0", "").trim().to_string()),
-                            Some(arg) => Ok(command.replace("$0", &arg.join(" "))),
+                if is_remove & !opt.debug {
+                    utils::remove_dir_all_file_with_path("node_modules")?;
+                    println!("node_modules removed success!")
+                }
+                Ok("".to_string())
+            }
+            Command::RemoveLockFile => {
+                let is_remove = utils::ask_confirm_question("Do you want to remove lockfile?")?;
+
+                if is_remove & !opt.debug {
+                    utils::remove_lock_files()?;
+                    println!("lockfile removed success!")
+                }
+                Ok("".to_string())
+            }
+            _ => {
+                let agent = agents::get_current_agent()?;
+
+                let hash_map = Agent::get_agent_hash_map(agent);
+
+                // instand of yarn install xxx => yarn add xxx
+                match &agent {
+                    Agent::Yarn | Agent::Pnpm => {
+                        if self.command == Command::Install && self.args.is_some() {
+                            self.command = Command::Add
                         }
-                    } else {
-                        Ok(command)
                     }
+                    _ => (),
+                };
+
+                match hash_map.get(&self.command) {
+                    Some(cmd) => match &cmd {
+                        Some(cmd) => {
+                            let command = cmd.clone();
+                            if command.contains("$0") {
+                                match &self.args {
+                                    None => Ok(command.replace("$0", "").trim().to_string()),
+                                    Some(arg) => Ok(command.replace("$0", &arg.join(" "))),
+                                }
+                            } else {
+                                Ok(command)
+                            }
+                        }
+                        None => Ok("".to_string()),
+                    },
+                    None => Ok("".to_string()),
                 }
-                None => Ok("".to_string()),
-            },
-            None => Ok("".to_string()),
+            }
         }
+        // don't need get agent or execute command
     }
 }

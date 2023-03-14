@@ -14,7 +14,7 @@ fn main() -> Result<(), CommonError> {
 
     let mut parser = parser::Parser::parser_opt(&opt)?;
 
-    let cmd = parser.gene_command()?;
+    let cmd = parser.gene_command(&opt)?;
 
     if cmd.len() > 0 {
         println!("Execute: {}", &cmd);
