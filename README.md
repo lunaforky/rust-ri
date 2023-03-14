@@ -90,13 +90,14 @@ ri un webpack
 # pnpm remove webpack
 # bun remove webpack
 ```
+## Other useful commands
 
-### `ri -c` - clean your workspace
+### clean your workspace
 
-- use `ri -c` to remove node_modules/**
-- use `ri -c lock` to remove lockfile of current agent, like `yarn.lock` / `pnpm-lock.yaml` / `package-lock.json` / `bun.lockb`
+- use `ri rm` to remove node_modules/**
+- use `ri rl` to remove lockfile of current agent, like `yarn.lock` / `pnpm-lock.yaml` / `package-lock.json` / `bun.lockb`
 
-### `ri cl` - clone a repo
+### clone a repo
 
 > you don't need to paste the url, just press enter
 
