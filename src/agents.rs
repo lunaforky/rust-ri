@@ -1,6 +1,6 @@
 use std::{collections::HashMap, fs};
 
-use crate::{commands::Command, error::CommonError, utils::select_a_choice};
+use crate::{commands::Command, error::CommonError, utils};
 
 #[derive(Debug, PartialEq, Eq, Clone, Copy)]
 pub enum Agent {
@@ -137,30 +137,32 @@ impl Agents {
 }
 
 pub fn get_current_agent() -> Result<Agent, CommonError> {
-    let mut agent = Agent::None;
+    let package_json = utils::read_json_file("package.json")?;
 
-    let agents = Agents::new();
-    for (file_name, the_agent) in agents.lock_map.into_iter() {
-        let is_found = fs::read(&file_name).is_ok();
-        if is_found {
-            agent = the_agent;
-            break;
+    let agent = match package_json.package_manager {
+        Some(manager) => {
+            let manager = manager.to_lowercase();
+            let manager = manager.split('@').collect::<Vec<&str>>()[0];
+            manager.to_string().into()
         }
-    }
-
-    println!("Current agent is {}", String::from(agent));
-
-    match agent {
-        Agent::None => {
+        None => {
+            let agents = Agents::new();
+            for (file_name, agent) in agents.lock_map.into_iter() {
+                let is_found = fs::read(&file_name).is_ok();
+                if is_found {
+                    println!("Current agent is {}", String::from(agent));
+                    return Ok(agent);
+                }
+            }
             let agents = vec![Agent::Npm, Agent::Pnpm, Agent::Yarn, Agent::Bun]
                 .iter()
                 .map(|&a| a.into())
                 .collect::<Vec<String>>();
 
-            let agent = select_a_choice(&agents, "agent", "Choose the agent")?.into();
-
-            Ok(agent)
+            utils::select_a_choice(&agents, "agent", "Choose the agent")?.into()
         }
-        _ => Ok(agent),
-    }
+    };
+
+    println!("Current agent is {}", String::from(agent));
+    Ok(agent)
 }

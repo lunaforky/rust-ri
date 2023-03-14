@@ -41,7 +41,9 @@ pub fn select_a_choice(
 #[derive(Deserialize, Debug)]
 pub struct PackageJson {
     pub scripts: Option<HashMap<String, String>>,
-    // pub packageManager: Option<String>,
+
+    #[serde(rename = "packageManager")]
+    pub package_manager: Option<String>,
 }
 
 pub fn read_json_file<P: AsRef<Path>>(path: P) -> Result<PackageJson, CommonError> {
