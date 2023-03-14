@@ -15,10 +15,6 @@ pub struct Opt {
 
     #[structopt(short, long)]
     pub global: bool,
-
-    /// Remove node_modules
-    #[structopt(short, long)]
-    pub clean: bool,
 }
 
 #[derive(StructOpt, Debug, Clone)]
@@ -31,6 +27,12 @@ pub enum SubCommand {
 
     /// Special for `run dev`
     Rd,
+
+    /// Remove node_modules
+    Rm,
+
+    /// Remove lockfile
+    Rl,
 
     /// Git clone
     Cl { src: Option<String> },

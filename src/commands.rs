@@ -14,4 +14,6 @@ pub enum Command {
     UpgradeInteractive,
     IgnoredCommand,
     GitClone,
+    RemoveNodeModules,
+    RemoveLockFile,
 }

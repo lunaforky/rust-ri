@@ -22,45 +22,9 @@ impl Parser {
             });
         }
 
-        if opt.clean {
-            return Self::parse_clean(opt);
-        }
-
         let parser = Parser::parse_cmd(opt)?;
 
         Ok(parser)
-    }
-
-    fn parse_clean(opt: &Opt) -> Result<Parser, CommonError> {
-        match &opt.cmd {
-            Some(v) => match v {
-                SubCommand::Other(c) => {
-                    if &c[0] == "lock" {
-                        let remove =
-                            utils::ask_confirm_question("Do you want to remove lockfile?")?;
-
-                        if remove && !opt.debug {
-                            utils::remove_lock_files()?;
-                            println!("remove success!")
-                        }
-                    }
-                }
-                _ => (),
-            },
-            None => {
-                let remove = utils::ask_confirm_question("Do you want to remove node_modules?")?;
-
-                if remove && !opt.debug {
-                    utils::remove_dir_all_file_with_path("node_modules")?;
-                    println!("remove success!")
-                }
-            }
-        }
-
-        Ok(Parser {
-            command: Command::IgnoredCommand,
-            args: None,
-        })
     }
 
     fn parse_cmd(opt: &Opt) -> Result<Parser, CommonError> {
@@ -80,6 +44,14 @@ impl Parser {
                         args: Some(package_name.clone()),
                     }),
                 },
+                SubCommand::Rm => Ok(Parser {
+                    command: Command::RemoveNodeModules,
+                    args: None,
+                }),
+                SubCommand::Rl => Ok(Parser {
+                    command: Command::RemoveLockFile,
+                    args: None,
+                }),
                 SubCommand::R { run_name } => match run_name {
                     None => {
                         let package_json = utils::read_json_file("package.json")?;
@@ -173,6 +145,26 @@ impl Parser {
             }
             let src = &src[0];
             return Ok(format!("git clone {}", src));
+        }
+
+        if self.command == Command::RemoveNodeModules {
+            let is_remove = utils::ask_confirm_question("Do you want to remove node_modules?")?;
+
+            if is_remove {
+                utils::remove_dir_all_file_with_path("node_modules")?;
+                println!("node_modules removed success!")
+            }
+            return Ok("".to_string());
+        }
+
+        if self.command == Command::RemoveLockFile {
+            let is_remove = utils::ask_confirm_question("Do you want to remove lockfile?")?;
+
+            if is_remove {
+                utils::remove_lock_files()?;
+                println!("lockfile removed success!")
+            }
+            return Ok("".to_string());
         }
 
         let agent = agents::get_current_agent()?;
