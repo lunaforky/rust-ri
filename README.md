@@ -107,6 +107,10 @@ ri un webpack
 
 full command: `ri cl <url>`
 
+### get package info
+
+- `ri info` - get package info of current directory
+
 <br>
 
 ### How?

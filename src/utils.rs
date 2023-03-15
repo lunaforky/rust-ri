@@ -40,6 +40,9 @@ pub fn select_a_choice(
 
 #[derive(Deserialize, Debug)]
 pub struct PackageJson {
+    pub name: Option<String>,
+    pub version: Option<String>,
+
     pub scripts: Option<HashMap<String, String>>,
 
     #[serde(rename = "packageManager")]

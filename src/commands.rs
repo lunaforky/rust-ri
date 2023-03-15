@@ -16,4 +16,5 @@ pub enum Command {
     GitClone,
     RemoveNodeModules,
     RemoveLockFile,
+    PkgInfo,
 }

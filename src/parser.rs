@@ -52,6 +52,10 @@ impl Parser {
                     command: Command::RemoveLockFile,
                     args: None,
                 }),
+                SubCommand::Info => Ok(Parser {
+                    command: Command::PkgInfo,
+                    args: None,
+                }),
                 SubCommand::R { run_name } => match run_name {
                     None => {
                         let package_json = utils::read_json_file("package.json")?;
@@ -159,6 +163,21 @@ impl Parser {
                     utils::remove_lock_files()?;
                     println!("lockfile removed success!")
                 }
+                Ok("".to_string())
+            }
+            Command::PkgInfo => {
+                let package_json = utils::read_json_file("package.json")?;
+
+                let name = package_json.name.unwrap_or("None".to_string());
+                let version = package_json.version.unwrap_or("None".to_string());
+
+                let info = format!("{} v{}", name, version);
+                println!("{}", info);
+
+                if let Some(manager) = package_json.package_manager {
+                    println!("package manager: {}", manager);
+                }
+
                 Ok("".to_string())
             }
             _ => {

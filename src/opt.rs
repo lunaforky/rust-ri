@@ -37,6 +37,9 @@ pub enum SubCommand {
     /// Git clone
     Cl { src: Option<String> },
 
+    /// Get package info
+    Info,
+
     #[structopt(external_subcommand)]
     Other(Vec<String>),
 }
