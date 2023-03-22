@@ -37,6 +37,12 @@ pub enum SubCommand {
     /// Git clone
     Cl { src: Option<String> },
 
+    /// Git pull
+    Pl,
+
+    /// Git push
+    Ps,
+
     /// Get package info
     Info,
 

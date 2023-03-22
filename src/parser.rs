@@ -110,6 +110,14 @@ impl Parser {
                         })
                     }
                 },
+                SubCommand::Pl => Ok(Parser {
+                    command: Command::GitPull,
+                    args: None,
+                }),
+                SubCommand::Ps => Ok(Parser {
+                    command: Command::GitPush,
+                    args: None,
+                }),
                 SubCommand::Rd => Ok(Parser {
                     command: Command::Run,
                     args: Some(vec!["dev".to_string()]),
@@ -147,6 +155,8 @@ impl Parser {
                 let src = &src[0];
                 Ok(format!("git clone {}", src))
             }
+            Command::GitPull => Ok("git pull".to_string()),
+            Command::GitPush => Ok("git push".to_string()),
             Command::RemoveNodeModules => {
                 let is_remove = utils::ask_confirm_question("Do you want to remove node_modules?")?;
 

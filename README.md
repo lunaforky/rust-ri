@@ -90,6 +90,7 @@ ri un webpack
 # pnpm remove webpack
 # bun remove webpack
 ```
+
 ## Other useful commands
 
 ### clean your workspace
@@ -106,6 +107,14 @@ ri un webpack
 
 
 full command: `ri cl <url>`
+
+### git push
+
+- `ri ps` - git push
+
+### git pull
+
+- `ri pl` - git pull
 
 ### get package info
 
