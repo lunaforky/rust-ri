@@ -118,6 +118,10 @@ impl Parser {
                     command: Command::GitPush,
                     args: None,
                 }),
+                SubCommand::Log => Ok(Parser {
+                    command: Command::GitLog,
+                    args: None,
+                }),
                 SubCommand::Rd => Ok(Parser {
                     command: Command::Run,
                     args: Some(vec!["dev".to_string()]),
@@ -157,6 +161,7 @@ impl Parser {
             }
             Command::GitPull => Ok("git pull".to_string()),
             Command::GitPush => Ok("git push".to_string()),
+            Command::GitLog => Ok("git log --graph --oneline --decorate".to_string()),
             Command::RemoveNodeModules => {
                 let is_remove = utils::ask_confirm_question("Do you want to remove node_modules?")?;
 

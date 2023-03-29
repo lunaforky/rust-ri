@@ -43,6 +43,9 @@ pub enum SubCommand {
     /// Git push
     Ps,
 
+    /// Git log
+    Log,
+
     /// Get package info
     Info,
 

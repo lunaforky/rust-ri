@@ -116,6 +116,14 @@ full command: `ri cl <url>`
 
 - `ri pl` - git pull
 
+### git log
+
+- `ri log`
+
+```bash
+git log --graph --oneline --decorate
+```
+
 ### get package info
 
 - `ri info` - get package info of current directory
