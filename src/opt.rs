@@ -49,6 +49,9 @@ pub enum SubCommand {
     /// Get package info
     Info,
 
+    /// Open the browser to the package's repository
+    Repo,
+
     #[structopt(external_subcommand)]
     Other(Vec<String>),
 }

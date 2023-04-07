@@ -128,6 +128,10 @@ git log --graph --oneline --decorate
 
 - `ri info` - get package info of current directory
 
+### Open the browser to the package's repository
+
+- `ri repo` - open the browser to the package's repository
+
 <br>
 
 ### How?

@@ -42,6 +42,7 @@ pub fn select_a_choice(
 pub struct PackageJson {
     pub name: Option<String>,
     pub version: Option<String>,
+    pub repository: Option<HashMap<String, String>>,
 
     pub scripts: Option<HashMap<String, String>>,
 

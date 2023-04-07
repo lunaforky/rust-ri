@@ -20,4 +20,5 @@ pub enum Command {
     RemoveNodeModules,
     RemoveLockFile,
     PkgInfo,
+    PkgRepo,
 }
