@@ -1,6 +1,5 @@
 use std::{collections::HashMap, fs};
-
-use crate::{commands::Command, error::CommonError, utils};
+use crate::{commands::Command, error::CommonError, package_json::PackageJson, utils};
 
 #[derive(Debug, PartialEq, Eq, Clone, Copy)]
 pub enum Agent {
@@ -137,7 +136,7 @@ impl Agents {
 }
 
 pub fn get_current_agent() -> Result<Agent, CommonError> {
-    let package_json = utils::read_json_file("package.json")?;
+    let package_json = PackageJson::from_path("package.json")?;
 
     let agent = match package_json.package_manager {
         Some(manager) => {

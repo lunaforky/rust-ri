@@ -1,7 +1,6 @@
 use crate::{agents::Agents, error::CommonError};
 use requestty::{ListItem, OnEsc, Question};
-use serde::Deserialize;
-use std::{collections::HashMap, fs, io::BufReader, path::Path, process};
+use std::{fs, path::Path, process};
 
 pub fn exclude(args: Vec<String>, v: &str) -> Vec<String> {
     args.into_iter()
@@ -36,29 +35,6 @@ pub fn select_a_choice(
         }
         _ => process::exit(1),
     }
-}
-
-#[derive(Deserialize, Debug)]
-pub struct PackageJson {
-    pub name: Option<String>,
-    pub version: Option<String>,
-    pub repository: Option<HashMap<String, String>>,
-
-    pub scripts: Option<HashMap<String, String>>,
-
-    #[serde(rename = "packageManager")]
-    pub package_manager: Option<String>,
-}
-
-pub fn read_json_file<P: AsRef<Path>>(path: P) -> Result<PackageJson, CommonError> {
-    let file = fs::File::open(path)?;
-
-    let reader = BufReader::new(file);
-
-    // Read the JSON contents of the file as an instance of `PackageJson`.
-    let pkg_json: PackageJson = serde_json::from_reader(reader)?;
-
-    Ok(pkg_json)
 }
 
 pub fn remove_dir_all_file_with_path<P: AsRef<Path>>(path: P) -> Result<(), CommonError> {

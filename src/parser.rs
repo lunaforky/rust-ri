@@ -3,6 +3,7 @@ use crate::{
     commands::Command,
     error::CommonError,
     opt::{Opt, SubCommand},
+    package_json::PackageJson,
     utils::{self, exclude, is_a_git_clone_url},
 };
 use clipboard::{ClipboardContext, ClipboardProvider};
@@ -62,7 +63,7 @@ impl Parser {
                 }),
                 SubCommand::R { run_name } => match run_name {
                     None => {
-                        let package_json = utils::read_json_file("package.json")?;
+                        let package_json = PackageJson::from_path("package.json")?;
                         let script = package_json.scripts.ok_or(CommonError::NotFound(
                             "package.json scripts field not found!".to_string(),
                         ))?;
@@ -185,7 +186,7 @@ impl Parser {
                 Ok("".to_string())
             }
             Command::PkgRepo => {
-                let package_json = utils::read_json_file("package.json")?;
+                let package_json = PackageJson::from_path("package.json")?;
                 match package_json.repository {
                     Some(repository) => {
                         let url = repository.get("url");
@@ -216,7 +217,7 @@ impl Parser {
                 }
             }
             Command::PkgInfo => {
-                let package_json = utils::read_json_file("package.json")?;
+                let package_json = PackageJson::from_path("package.json")?;
 
                 let name = package_json.name.unwrap_or("None".to_string());
                 let version = package_json.version.unwrap_or("None".to_string());

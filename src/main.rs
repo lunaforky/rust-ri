@@ -5,6 +5,7 @@ mod agents;
 mod commands;
 mod error;
 mod opt;
+mod package_json;
 mod parser;
 mod runner;
 mod utils;
