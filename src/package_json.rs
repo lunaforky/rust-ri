@@ -24,4 +24,34 @@ impl PackageJson {
 
         Ok(pkg_json)
     }
+
+    pub fn get_url(&self) -> Result<String, CommonError> {
+        match &self.repository {
+            Some(repo) => match repo.get("url") {
+                Some(url) => {
+                    let mut url = url.to_string();
+                    // TODO: use regex
+                    if url.starts_with("git+") {
+                        url = url.replace("git+", "");
+                    }
+                    if url.ends_with(".git") {
+                        url = url.replace(".git", "");
+                    }
+                    // TODO: validate url
+                    if url.is_empty() {
+                        return Err(CommonError::NotFound(
+                            "package.json repository url field is empty!".to_string(),
+                        ));
+                    }
+                    Ok(url)
+                }
+                None => Err(CommonError::NotFound(
+                    "package.json repository url field not found!".to_string(),
+                )),
+            },
+            None => Err(CommonError::NotFound(
+                "package.json repository field not found!".to_string(),
+            )),
+        }
+    }
 }

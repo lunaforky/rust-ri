@@ -187,34 +187,7 @@ impl Parser {
             }
             Command::PkgRepo => {
                 let package_json = PackageJson::from_path("package.json")?;
-                match package_json.repository {
-                    Some(repository) => {
-                        let url = repository.get("url");
-                        match url {
-                            Some(url) => {
-                                // TODO: use regex
-                                let url = if url.ends_with(".git") {
-                                    url.replace(".git", "")
-                                } else {
-                                    url.to_string()
-                                };
-                                let url = if url.starts_with("git+") {
-                                    url.replace("git+", "")
-                                } else {
-                                    url.to_string()
-                                };
-                                // TODO: validate url
-                                Ok(format!("start {}", url))
-                            }
-                            None => Err(CommonError::NotFound(
-                                "package.json repository url field not found!".to_string(),
-                            )),
-                        }
-                    }
-                    None => Err(CommonError::NotFound(
-                        "package.json repository field not found!".to_string(),
-                    )),
-                }
+                package_json.get_url()
             }
             Command::PkgInfo => {
                 let package_json = PackageJson::from_path("package.json")?;
