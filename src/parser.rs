@@ -187,7 +187,8 @@ impl Parser {
             }
             Command::PkgRepo => {
                 let package_json = PackageJson::from_path("package.json")?;
-                package_json.get_url()
+                let url = package_json.get_url()?;
+                Ok(format!("start {}", url))
             }
             Command::PkgInfo => {
                 let package_json = PackageJson::from_path("package.json")?;
