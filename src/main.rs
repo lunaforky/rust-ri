@@ -2,6 +2,7 @@ use error::CommonError;
 use structopt::StructOpt;
 
 mod agents;
+mod cargo_toml;
 mod commands;
 mod error;
 mod opt;

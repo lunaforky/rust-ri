@@ -1,5 +1,6 @@
 use crate::{
     agents::{self, Agent},
+    cargo_toml::CargoToml,
     commands::Command,
     error::CommonError,
     opt::{Opt, SubCommand},
@@ -7,6 +8,7 @@ use crate::{
     utils::{self, exclude, is_a_git_clone_url},
 };
 use clipboard::{ClipboardContext, ClipboardProvider};
+use std::fs;
 
 #[derive(Debug)]
 pub struct Parser {
@@ -185,11 +187,28 @@ impl Parser {
                 }
                 Ok("".to_string())
             }
-            Command::PkgRepo => {
-                let package_json = PackageJson::from_path("package.json")?;
-                let url = package_json.get_url()?;
-                Ok(format!("start {}", url))
-            }
+            Command::PkgRepo => match fs::read_dir(".") {
+                Ok(rd) => {
+                    let files: Vec<_> = rd
+                        .filter(|d| d.is_ok())
+                        .map(|d| d.unwrap().file_name().into_string().unwrap())
+                        .collect();
+
+                    let url = if files.contains(&"package.json".to_string()) {
+                        PackageJson::from_path("package.json")?.get_url()?
+                    } else if files.contains(&"Cargo.toml".to_string()) {
+                        CargoToml::from_path("Cargo.toml")?.get_url()?
+                    } else {
+                        return Err(CommonError::NotFound(
+                            "package.json or Cargo.toml not found!".to_string(),
+                        ));
+                    };
+                    Ok(format!("start {}", url))
+                }
+                Err(_) => Err(CommonError::NotFound(
+                    "package.json or Cargo.toml not found!".to_string(),
+                )),
+            },
             Command::PkgInfo => {
                 let package_json = PackageJson::from_path("package.json")?;
 
