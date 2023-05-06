@@ -6,11 +6,18 @@ use std::{collections::HashMap, fs, io::BufReader, path::Path};
 pub struct PackageJson {
     pub name: Option<String>,
     pub version: Option<String>,
-    pub repository: Option<HashMap<String, String>>,
+    pub repository: Option<PkgRepo>,
     pub scripts: Option<HashMap<String, String>>,
 
     #[serde(rename = "packageManager")]
     pub package_manager: Option<String>,
+}
+
+#[derive(Deserialize, Debug)]
+#[serde(untagged)]
+pub enum PkgRepo {
+    String(String),
+    HashMap(HashMap<String, String>),
 }
 
 impl PackageJson {
@@ -27,31 +34,47 @@ impl PackageJson {
 
     pub fn get_url(&self) -> Result<String, CommonError> {
         match &self.repository {
-            Some(repo) => match repo.get("url") {
-                Some(url) => {
-                    let mut url = url.to_string();
-                    // TODO: use regex
-                    if url.starts_with("git+") {
-                        url = url.replace("git+", "");
-                    }
-                    if url.ends_with(".git") {
-                        url = url.replace(".git", "");
-                    }
-                    // TODO: validate url
-                    if url.is_empty() {
-                        return Err(CommonError::NotFound(
-                            "package.json repository url field is empty!".to_string(),
-                        ));
-                    }
-                    Ok(url)
-                }
-                None => Err(CommonError::NotFound(
-                    "package.json repository url field not found!".to_string(),
-                )),
+            Some(repo) => match repo {
+                PkgRepo::String(repository) => parse_url(repository),
+                PkgRepo::HashMap(repo) => match repo.get("url") {
+                    Some(url) => parse_url(url),
+                    None => Err(CommonError::NotFound(
+                        "package.json repository url field not found!".to_string(),
+                    )),
+                },
             },
             None => Err(CommonError::NotFound(
                 "package.json repository field not found!".to_string(),
             )),
         }
+    }
+}
+
+fn parse_url(url: &str) -> Result<String, CommonError> {
+    let mut url = url.to_string();
+    // TODO: use regex
+    if url.starts_with("git+") {
+        url = url.replace("git+", "");
+    }
+    if url.ends_with(".git") {
+        url = url.replace(".git", "");
+    }
+    // TODO: validate url
+    if url.is_empty() {
+        return Err(CommonError::NotFound(
+            "package.json repository url field is empty!".to_string(),
+        ));
+    }
+    Ok(url)
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_read_package_json() {
+        let result = PackageJson::from_path("tests/package.json");
+        assert_eq!(result.is_ok(), true);
     }
 }
