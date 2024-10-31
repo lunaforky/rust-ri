@@ -134,9 +134,6 @@ git log --graph --oneline --decorate
 
 <br>
 
-### How?
-
-**ri** assumes that you work with lockfiles (and you should)
 
 Before it runs, it will detect your `yarn.lock` / `pnpm-lock.yaml` / `package-lock.json` / `bun.lockb` to know current package manager (or `packageManager` field in your packages.json if specified), and runs the [corresponding commands](https://github.com/JiatLn/ri/blob/main/src/agents.rs).
 
